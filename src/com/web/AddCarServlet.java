@@ -28,7 +28,8 @@ public class AddCarServlet extends HttpServlet {
        String remark = request.getParameter("remark");
        String nums = request.getParameter("nums");
         String str = goodno+"&"+goodname+"&"+price+"&"+url+"&"+remark+"&"+nums;
-        Cookie strs = new Cookie(id,str);
+        Cookie strs = new Cookie(id, URLEncoder.encode(str,"UTF-8"));
+
         response.addCookie(strs);
 
     }

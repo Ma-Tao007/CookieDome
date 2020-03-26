@@ -26,17 +26,18 @@
 <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
 </body>
 <script>
-    var shoplist = []
+
 function getDate(){
+    var shoplist = []
     var cookies = document.cookie.split(";")
 
     for(var i=0;i<cookies.length;i++){
-        var str = cookies[i]
+        var str = decodeURIComponent(cookies[i])
         var shop = {}
         if(str!="" && str!=undefined){
             var spstr = str.split("=")
             shop.id = spstr[0]
-            var shopstr = spstr[1].substring(1,spstr[1].length-1).split("&")
+            var shopstr = spstr[1].split("&")//substring(1,spstr[1].length-1).
 
             if(shopstr.length!=0 && shopstr!=undefined){
                 shop.goodno = shopstr[0]
@@ -69,6 +70,7 @@ function getDate(){
             '<td><button onClick="delCar('+shoplist[i].id+')">删除</button></td>'+
             '</tr>'
     }
+    tbody.innerHTML = ""
     tbody.innerHTML = str
 
 }
@@ -76,9 +78,9 @@ function getDate(){
 
     function delCar(id){
        delCookie(id);
-       getDate()
-        var tbody = document.getElementById("tbody")
-        tbody.innerHTML = ""
+
+
+        getDate()
     }
 
     function generateHideElement(name, value) {
@@ -93,8 +95,6 @@ function getDate(){
        for(var i=0;i<6;i++){
            delCookie(i)
            getDate()
-           var tbody = document.getElementById("tbody")
-           tbody.innerHTML = ""
        }
     }
     function delCookie(name)
