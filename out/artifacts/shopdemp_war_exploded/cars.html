@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body onload="getDate()">
+<h3>购物车</h3>
+<table cellpadding="0px" cellspacing="0px" border="1px soild" style="text-align: center;width: 600px;height: 500px" >
+    <thead>
+    <tr>
+        <th>商品图片</th>
+        <th>商品编码</th>
+        <th>商品名称</th>
+        <th>数量</th>
+        <th>价格（元/个）</th>
+        <th>商品介绍</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+</table>
+<button onclick="delAll()">清空购物车</button>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+</body>
+<script>
+    var shoplist = []
+function getDate(){
+    var cookies = document.cookie.split(";")
+
+    for(var i=0;i<cookies.length;i++){
+        var str = cookies[i]
+        var shop = {}
+        if(str!="" && str!=undefined){
+            var spstr = str.split("=")
+            shop.id = spstr[0]
+            var shopstr = spstr[1].substring(1,spstr[1].length-1).split("&")
+
+            if(shopstr.length!=0 && shopstr!=undefined){
+                shop.goodno = shopstr[0]
+                shop.goodname = shopstr[1]
+                shop.price = shopstr[2]
+                shop.url = shopstr[3]
+                shop.remark = shopstr[4]
+                shop.nums = shopstr[5]
+
+                shoplist.push(shop)
+            }
+        }
+    }
+
+    console.log(shoplist)
+
+
+    var tbody = document.getElementById("tbody")
+
+    var str = ''
+
+    for(var i=0;i<shoplist.length;i++){
+        str += '<tr>'+
+            '<td><img src='+shoplist[i].url+' width="100px"></td>'+
+            '<td>'+shoplist[i].goodno+'</td>'+
+            '<td>'+shoplist[i].goodname+'</td>'+
+            '<td>'+shoplist[i].nums+'</td>'+
+            '<td>'+shoplist[i].price+'</td>'+
+            '<td>'+shoplist[i].remark+'</td>'+
+            '<td><button onClick="delCar('+shoplist[i].id+')">删除</button></td>'+
+            '</tr>'
+    }
+    tbody.innerHTML = str
+
+}
+
+
+    function delCar(id){
+       delCookie(id);
+       getDate()
+        var tbody = document.getElementById("tbody")
+        tbody.innerHTML = ""
+    }
+
+    function generateHideElement(name, value) {
+        var tempInput = document.createElement("input");
+        tempInput.type = "hidden";
+        tempInput.name = name;
+        tempInput.value = value;
+        return tempInput;
+    }
+    
+    function delAll() {
+       for(var i=0;i<6;i++){
+           delCookie(i)
+           getDate()
+           var tbody = document.getElementById("tbody")
+           tbody.innerHTML = ""
+       }
+    }
+    function delCookie(name)
+    {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+
+
+</script>
+</html>
